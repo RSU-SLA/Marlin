@@ -218,6 +218,12 @@
   #define E1_CS_PIN                         PD12
 #endif
 
+#define I_MIN_PIN                           -1
+#define J_MIN_PIN                           -1
+/*#ifndef J_CS_PIN
+  #define J_CS_PIN                          PD12
+#endif*/
+
 //
 // Temperature Sensors
 //
