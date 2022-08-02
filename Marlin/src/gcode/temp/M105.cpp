@@ -23,6 +23,12 @@
 #include "../gcode.h"
 #include "../../module/temperature.h"
 
+#ifdef I2C_TOF_SENSOR
+#include "../../feature/tof_sensor.h"
+#endif
+#if ENABLED(HAS_XY_DAC)
+  #include "../../feature/dac_ad5663r.h"
+#endif
 /**
  * M105: Read hot end and bed temperature
  */
@@ -36,12 +42,19 @@ void GcodeSuite::M105() {
   #if HAS_TEMP_SENSOR
 
     thermalManager.print_heater_states(target_extruder OPTARG(HAS_TEMP_REDUNDANT, parser.boolval('R')));
-
+    #ifdef I2C_TOF_SENSOR
+    tofSensor.read();
+    #endif
     SERIAL_EOL();
 
   #else
 
     SERIAL_ECHOLNPGM(" T:0"); // Some hosts send M105 to test the serial connection
 
+  #endif
+
+  #if ENABLED(HAS_XY_DAC)
+  ad5663r::setValue(1, 1);
+   SERIAL_ECHOLNPGM(" ad5663r:0");
   #endif
 }

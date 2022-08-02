@@ -96,6 +96,7 @@ Stepper stepper; // Singleton
 #include "../sd/cardreader.h"
 #include "../MarlinCore.h"
 #include "../HAL/shared/Delay.h"
+#include "../feature/dac_ad5663r.h"
 
 #if ENABLED(INTEGRATED_BABYSTEPPING)
   #include "../feature/babystep.h"
@@ -1952,6 +1953,20 @@ uint32_t Stepper::block_phase_isr() {
   if (current_block) {
     // If current block is finished, reset pointer and finalize state
     if (step_events_completed >= step_event_count) {
+      
+        #if ENABLED(HAS_XY_DAC)
+        if (!(current_block->is_fan_sync() || current_block->is_pwr_sync())) 
+        {
+          if (current_block->is_move()) 
+          {
+            ad5663r::setValue(0, uint16_t(count_position.x));// + current_block->steps.x * (TEST(current_block->direction_bits, X_AXIS) ? -1 : 1)));
+            ad5663r::setValue(1, uint16_t(count_position.y));// + current_block->steps.y * (TEST(current_block->direction_bits, Y_AXIS) ? -1 : 1)));
+          }
+          //SERIAL_ERROR_MSG("SETVALUE", 7, current_block->position.x, "");
+            
+        }
+        #endif
+
       #if ENABLED(DIRECT_STEPPING)
         // Direct stepping is currently not ready for HAS_I_AXIS
         #if STEPPER_PAGE_FORMAT == SP_4x4D_128
@@ -1975,6 +1990,20 @@ uint32_t Stepper::block_phase_isr() {
     else {
       // Step events not completed yet...
 
+      #if ENABLED(HAS_XY_DAC)
+        if (!(current_block->is_fan_sync() || current_block->is_pwr_sync())) 
+        {
+          if (current_block->is_move() && count_position.x >= 0 && count_position.y >= 0) 
+          {
+            ad5663r::setValue(0, count_position.x);// + (uint16_t)current_block->steps.x * (TEST(current_block->direction_bits, X_AXIS) ? -1 : 1));
+            ad5663r::setValue(1, count_position.y);// + (uint16_t)current_block->steps.y * (TEST(current_block->direction_bits, Y_AXIS) ? -1 : 1));
+          //SERIAL_ERROR_MSG("SETVALUE: ", count_position.x, "");
+          }
+
+            
+        }
+        #endif
+        
       // Are we in acceleration phase ?
       if (step_events_completed <= accelerate_until) { // Calculate new timer value
 
@@ -2172,9 +2201,21 @@ uint32_t Stepper::block_phase_isr() {
           }
         #endif
 
+
         TERN_(LASER_SYNCHRONOUS_M106_M107, if (current_block->is_fan_sync()) planner.sync_fan_speeds(current_block->fan_speed));
 
-        if (!(current_block->is_fan_sync() || current_block->is_pwr_sync())) _set_position(current_block->position);
+        if (!(current_block->is_fan_sync() || current_block->is_pwr_sync())) 
+        {
+          #if ENABLED(HAS_XY_DAC)
+          if (current_block->is_move()) 
+          {
+            ad5663r::setValue(7, current_block->position.x);
+          }
+            
+          #endif
+
+          _set_position(current_block->position);
+        }
 
         discard_current_block();
 

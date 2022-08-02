@@ -532,6 +532,25 @@
   #endif
 #endif
 
+#if ENABLED(HAS_XY_DAC)
+  
+  /*
+  #define DAC_MOSI_PIN             EXP1_08_PIN // DIN
+  #define DAC_SCK_PIN              EXP1_06_PIN
+  #define DAC_CS_PIN               EXP1_07_PIN  // SYNC
+  */
+  
+  #define DAC_MOSI_PIN             PB15 // DIN
+  #define DAC_SCK_PIN              PB13
+  #define DAC_CS_PIN               PB12  // SYNC
+ 
+ /*
+  #define DAC_CS_PIN                 EXP2_07_PIN
+  #define DAC_SCK_PIN                EXP2_09_PIN
+  #define DAC_MOSI_PIN               EXP2_05_PIN
+  */
+#endif
+
 #if HAS_SPI_TFT
 
   #define BTN_EN1                    EXP2_08_PIN

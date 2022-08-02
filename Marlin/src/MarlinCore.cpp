@@ -252,6 +252,13 @@
   #include "feature/easythreed_ui.h"
 #endif
 
+#if ENABLED(HAS_XY_DAC)
+  #include "feature/dac_ad5663r.h"
+#endif
+
+#if ENABLED(I2C_TOF_SENSOR)
+  #include "feature/tof_sensor.h"
+#endif
 PGMSTR(M112_KILL_STR, "M112 Shutdown");
 
 MarlinState marlin_state = MF_INITIALIZING;
@@ -877,6 +884,8 @@ void idle(bool no_stepper_sleep/*=false*/) {
 
   // Update the LVGL interface
   TERN_(HAS_TFT_LVGL_UI, LV_TASK_HANDLER());
+
+  TERN_(HAS_XY_DAC, ad5663r::tick());
 
   IDLE_DONE:
   TERN_(MARLIN_DEV_MODE, idle_depth--);
@@ -1641,6 +1650,14 @@ void setup() {
 
   #if HAS_TRINAMIC_CONFIG && DISABLED(PSU_DEFAULT_OFF)
     SETUP_RUN(test_tmc_connection());
+  #endif
+
+  #if ENABLED(HAS_XY_DAC)
+    ad5663r::init(SPI_HALF_SPEED);
+  #endif
+
+  #if ENABLED(I2C_TOF_SENSOR)
+    tofSensor.init();
   #endif
 
   marlin_state = MF_RUNNING;
