@@ -1099,6 +1099,10 @@ private:
     static void M672();
   #endif
 
+  #if ENABLED(HAS_XY_DAC)
+    static void M690();
+  #endif
+
   #if ENABLED(FILAMENT_LOAD_UNLOAD_GCODES)
     static void M701();
     static void M702();

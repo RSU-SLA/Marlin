@@ -542,6 +542,7 @@
   
   #define DAC_MOSI_PIN             PB15 // DIN
   #define DAC_SCK_PIN              PB13
+  //#define DAC_CS_PIN               PD9  // SYNC
   #define DAC_CS_PIN               PB12  // SYNC
  
  /*

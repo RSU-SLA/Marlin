@@ -12,11 +12,11 @@
   ],
   "debug": {
     "default_tools": [
-      "stlink"
+      "custom"
     ],
     "jlink_device": "STM32F429VG",
     "onboard_tools": [
-      "stlink"
+      "custom"
     ],
     "openocd_board": "stm32f429",
     "openocd_target": "stm32f4x",

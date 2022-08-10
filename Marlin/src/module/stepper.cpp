@@ -1959,8 +1959,8 @@ uint32_t Stepper::block_phase_isr() {
         {
           if (current_block->is_move()) 
           {
-            ad5663r::setValue(0, uint16_t(count_position.x));// + current_block->steps.x * (TEST(current_block->direction_bits, X_AXIS) ? -1 : 1)));
-            ad5663r::setValue(1, uint16_t(count_position.y));// + current_block->steps.y * (TEST(current_block->direction_bits, Y_AXIS) ? -1 : 1)));
+            //ad5663r::setValue(0, uint16_t(count_position.x * DAC_XY_SCALE));// + current_block->steps.x * (TEST(current_block->direction_bits, X_AXIS) ? -1 : 1)));
+            //ad5663r::setValue(1, uint16_t(count_position.y * DAC_XY_SCALE));// + current_block->steps.y * (TEST(current_block->direction_bits, Y_AXIS) ? -1 : 1)));
           }
           //SERIAL_ERROR_MSG("SETVALUE", 7, current_block->position.x, "");
             
@@ -1995,8 +1995,8 @@ uint32_t Stepper::block_phase_isr() {
         {
           if (current_block->is_move() && count_position.x >= 0 && count_position.y >= 0) 
           {
-            ad5663r::setValue(0, count_position.x);// + (uint16_t)current_block->steps.x * (TEST(current_block->direction_bits, X_AXIS) ? -1 : 1));
-            ad5663r::setValue(1, count_position.y);// + (uint16_t)current_block->steps.y * (TEST(current_block->direction_bits, Y_AXIS) ? -1 : 1));
+            ad5663r::setValue(0, count_position.x * DAC_XY_SCALE);// + (uint16_t)current_block->steps.x * (TEST(current_block->direction_bits, X_AXIS) ? -1 : 1));
+            ad5663r::setValue(1, count_position.y * DAC_XY_SCALE);// + (uint16_t)current_block->steps.y * (TEST(current_block->direction_bits, Y_AXIS) ? -1 : 1));
           //SERIAL_ERROR_MSG("SETVALUE: ", count_position.x, "");
           }
 
@@ -2209,7 +2209,7 @@ uint32_t Stepper::block_phase_isr() {
           #if ENABLED(HAS_XY_DAC)
           if (current_block->is_move()) 
           {
-            ad5663r::setValue(7, current_block->position.x);
+            //ad5663r::setValue(7, current_block->position.x);
           }
             
           #endif

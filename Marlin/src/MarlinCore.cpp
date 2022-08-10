@@ -254,6 +254,7 @@
 
 #if ENABLED(HAS_XY_DAC)
   #include "feature/dac_ad5663r.h"
+  #include "feature/dac_stm32f4.h"
 #endif
 
 #if ENABLED(I2C_TOF_SENSOR)
@@ -1654,6 +1655,7 @@ void setup() {
 
   #if ENABLED(HAS_XY_DAC)
     ad5663r::init(SPI_HALF_SPEED);
+    dac_stm32f4::init(DAC_TRIGGER_NONE);
   #endif
 
   #if ENABLED(I2C_TOF_SENSOR)

@@ -38,6 +38,10 @@
   #include "../feature/ammeter.h"
 #endif
 
+#if ENABLED(HAS_XY_DAC)
+  #include "../feature/dac_stm32f4.h"
+#endif
+
 SpindleLaser cutter;
 bool SpindleLaser::enable_state;                                      // Virtual enable state, controls enable pin if present and or apply power if > 0
 uint8_t SpindleLaser::power,                                          // Actual power output 0-255 ocr or "0 = off" > 0 = "on"
@@ -104,11 +108,17 @@ void SpindleLaser::init() {
   }
 
   void SpindleLaser::set_ocr(const uint8_t ocr) {
+    #if ENABLED(HAS_XY_DAC)
+        dac_stm32f4::setValue(DAC_CHANNEL_2, ocr);
+    #endif
     WRITE(SPINDLE_LASER_ENA_PIN,  SPINDLE_LASER_ACTIVE_STATE); // Cutter ON
     _set_ocr(ocr);
   }
 
   void SpindleLaser::ocr_off() {
+    #if ENABLED(HAS_XY_DAC)
+        dac_stm32f4::setValue(DAC_CHANNEL_2, 0);
+    #endif
     WRITE(SPINDLE_LASER_ENA_PIN, !SPINDLE_LASER_ACTIVE_STATE); // Cutter OFF
     _set_ocr(0);
   }

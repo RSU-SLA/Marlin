@@ -28,6 +28,12 @@
 #include "../../feature/spindle_laser.h"
 #include "../../module/stepper.h"
 
+
+
+#if ENABLED(HAS_XY_DAC)
+  #include "../../feature/dac_stm32f4.h"
+#endif
+
 /**
  * Laser:
  *  M3 - Laser ON/Power (Ramped power)
@@ -133,6 +139,7 @@ void GcodeSuite::M3_M4(const bool is_M4) {
       #endif
     );
     TERN_(SPINDLE_CHANGE_DIR, cutter.set_reverse(is_M4));
+    //dac_stm32f4::setValue(DAC_CHANNEL_2, cutter.power);
   }
 }
 

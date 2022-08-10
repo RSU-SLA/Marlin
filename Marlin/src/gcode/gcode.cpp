@@ -211,7 +211,7 @@ void GcodeSuite::get_destination_from_command() {
   #endif
 
   if (parser.floatval('F') > 0) {
-    feedrate_mm_s = parser.value_feedrate();
+    feedrate_mm_s = parser.value_feedrate() * DAC_XY_SCALE_F;
     // Update the cutter feed rate for use by M4 I set inline moves.
     TERN_(LASER_FEATURE, cutter.feedrate_mm_m = MMS_TO_MMM(feedrate_mm_s));
   }
@@ -239,6 +239,17 @@ void GcodeSuite::get_destination_from_command() {
           cutter.menuPower = cutter.unitPower = u;
           cutter.inline_power(TERN(SPINDLE_LASER_USE_PWM, cutter.upower_to_ocr(u), u > 0 ? 255 : 0));
         }
+        
+        if (parser.seen('E')) {
+          cutter.menuPower = cutter.unitPower = 116;
+          cutter.inline_power(116);
+          //cutter.set_enabled(true);
+        }
+        else
+        {
+          cutter.inline_power(0);
+          //cutter.set_enabled(false);
+        }
       }
       else if (parser.codenum == 0) {
         // For dynamic mode we need to flag isPowered off, dynamic power is calculated in the stepper based on feedrate.
@@ -246,8 +257,12 @@ void GcodeSuite::get_destination_from_command() {
         cutter.inline_power(0); // This is planner-based so only set power and do not disable inline control flags.
       }
     }
-    else if (parser.codenum == 0)
-      cutter.apply_power(0);
+    else
+    {
+
+        if (parser.codenum == 0)
+          cutter.apply_power(0);
+    }
   #endif // LASER_FEATURE
 }
 
@@ -942,6 +957,10 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
 
       #if ENABLED(DUET_SMART_EFFECTOR) && PIN_EXISTS(SMART_EFFECTOR_MOD)
         case 672: M672(); break;                                  // M672: Set/clear Duet Smart Effector sensitivity
+      #endif
+
+      #if ENABLED(HAS_XY_DAC)
+        case 690: M690(); break;
       #endif
 
       #if ENABLED(FILAMENT_LOAD_UNLOAD_GCODES)
