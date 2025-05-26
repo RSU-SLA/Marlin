@@ -325,6 +325,12 @@
  *** "T" Codes ***
  *
  * T0-T3 - Select an extruder (tool) by index: "T<n> F<units/min>"
+ * 
+ **** RUSSLA GCODES
+ * <Start, Mid, End, Scaling>
+ * M5001 Set Laser X parameters
+ * M5002 Set Laser Y parameters
+ * M5003 Set Laser Speed scaling
  */
 
 #include "../inc/MarlinConfig.h"
@@ -1246,6 +1252,12 @@ private:
   #if ENABLED(CONTROLLER_FAN_EDITABLE)
     static void M710();
     static void M710_report(const bool forReplay=true);
+  #endif
+
+  #if ENABLED(HAS_XY_DAC)
+    static void M5001();
+    static void M5002();
+    static void M5003();
   #endif
 
   static void T(const int8_t tool_index);

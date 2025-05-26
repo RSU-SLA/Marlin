@@ -6,12 +6,28 @@
 
 #include HAL_PATH(../HAL, MarlinSPI.h)
 
+typedef struct {
+  uint32_t min_val;
+  uint32_t mid_val;
+  uint32_t max_val;
+  float scaling; // DAC_XY_SCALE
+} dac_settings_t;
+
+
+static constexpr dac_settings_t dac_default = {
+  22768,
+  32768,
+  42768,
+  100.0f
+};
+
 class ad5663r
 {
   static MarlinSPI mySPI;
   static SPI_HandleTypeDef SPIx;
 public:
     ad5663r();
+    static dac_settings_t settings[2];
     static void asdf();
     static void tick();
     static void SetCS(bool val) { OUT_WRITE(DAC_CS_PIN, val); }

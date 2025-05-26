@@ -1019,7 +1019,7 @@
  */
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   { 378, 378, 400, 80, 80 }
 #define DAC_XY_SCALE 100
-#define DAC_XY_SCALE_F 500
+#define DAC_XY_SCALE_F 100
 #define DEFAULT_AXIS_STEPS_PER_UNIT   { 5, 5, 400, 80, 80 }
 
 /**

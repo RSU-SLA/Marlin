@@ -170,6 +170,10 @@
   #include "../lcd/extui/dgus/DGUSDisplayDef.h"
 #endif
 
+#if ENABLED(HAS_XY_DAC)
+  #include "../feature/dac_ad5663r.h"
+#endif
+
 #pragma pack(push, 1) // No padding between variables
 
 #if HAS_ETHERNET
@@ -1612,6 +1616,16 @@ void MarlinSettings::postprocess() {
     #endif
 
     //
+    // RSUSLA DAC
+    //
+    #if ENABLED(HAS_XY_DAC)
+    {
+      _FIELD_TEST(ad5663r::settings);
+      EEPROM_WRITE(ad5663r::settings);
+    }
+    #endif
+
+    //
     // Report final CRC and Data Size
     //
     if (!eeprom_error) {
@@ -2588,6 +2602,19 @@ void MarlinSettings::postprocess() {
       {
         HOTEND_LOOP()
           EEPROM_READ(thermalManager.temp_hotend[e].constants);
+      }
+      #endif
+
+      //
+      // RSUSLA DAC
+      //
+      #if ENABLED(HAS_XY_DAC)
+      {
+        dac_settings_t dacs[2];
+        _FIELD_TEST(dacs);
+        EEPROM_READ(dacs);
+
+        COPY(ad5663r::settings, dacs);
       }
       #endif
 

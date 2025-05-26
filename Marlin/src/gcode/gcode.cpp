@@ -1110,6 +1110,12 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
         case 3426: M3426(); break;                                // M3426: Read MCP3426 ADC (over i2c)
       #endif
 
+      #if ENABLED(HAS_XY_DAC)
+        case 5001: M5001(); break;
+        case 5002: M5002(); break;
+        case 5003: M5003(); break;
+      #endif
+
       default: parser.unknown_command_warning(); break;
     }
     break;

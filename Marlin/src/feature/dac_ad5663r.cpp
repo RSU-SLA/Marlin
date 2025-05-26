@@ -1,8 +1,8 @@
 #include "dac_ad5663r.h"
 
-
+dac_settings_t ad5663r::settings[2];
 ad5663r::ad5663r() {}
-#define GALVO_XY_DMA
+#define GALVO_XY_NO_DMA
 
 MarlinSPI ad5663r::mySPI(DAC_MOSI_PIN, NC, DAC_SCK_PIN, NC);
 #ifdef GALVO_XY_DMA
@@ -169,18 +169,18 @@ void ad5663r::setValue(const uint8_t channel, const uint16_t value)
   if (SPIx.Instance == nullptr)
     return;
     
-  SERIAL_ERROR_MSG("setValue channel: ", channel, " val : ", value);
+  //SERIAL_ERROR_MSG("setValue channel: ", channel, " val : ", value);
     static uint16_t lastData[2] = {0,0};
     if (channel < 2)
     {
         if (lastData[channel] == value)
         {
-          SERIAL_ERROR_MSG("SAME");
+    //      SERIAL_ERROR_MSG("SAME");
           return;
         }
     }else if (lastData[0] == value || lastData[1] == value)
     {
-      SERIAL_ERROR_MSG("SAME");
+//      SERIAL_ERROR_MSG("SAME");
       return;
     }
 
