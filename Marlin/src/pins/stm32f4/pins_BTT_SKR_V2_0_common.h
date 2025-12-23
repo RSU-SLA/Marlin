@@ -171,6 +171,7 @@
 //
 // Steppers
 //
+// overridden by DAC
 #define X_STEP_PIN                          PE2
 #define X_DIR_PIN                           PE1
 #define X_ENABLE_PIN                        PE3
@@ -178,6 +179,7 @@
   #define X_CS_PIN                          PE0
 #endif
 
+// overridden by DAC
 #define Y_STEP_PIN                          PD5
 #define Y_DIR_PIN                           PD4
 #define Y_ENABLE_PIN                        PD6
@@ -185,6 +187,39 @@
   #define Y_CS_PIN                          PD3
 #endif
 
+// 4 I - Rakel
+#define I_STEP_PIN                          PD15
+#define I_DIR_PIN                           PD14
+#define I_ENABLE_PIN                        PC7
+#ifndef I_CS_PIN
+  #define I_CS_PIN                          PC6
+#endif
+
+// 5 J - Pumpe
+#define J_STEP_PIN                          PD11
+#define J_DIR_PIN                           PD10
+#define J_ENABLE_PIN                        PD13
+#ifndef J_CS_PIN
+  #define J_CS_PIN                          PD12
+#endif
+
+// 1 K - Z-Zylinder
+#define K_STEP_PIN                          PE2
+#define K_DIR_PIN                           PE1
+#define K_ENABLE_PIN                        PE3
+#ifndef K_CS_PIN
+  #define K_CS_PIN                          PE0
+#endif
+
+// 2 U - Unused
+#define U_STEP_PIN                          PD5
+#define U_DIR_PIN                           PD4
+#define U_ENABLE_PIN                        PD6
+#ifndef U_CS_PIN
+  #define U_CS_PIN                          PD3
+#endif
+
+// Z-Platform
 #define Z_STEP_PIN                          PA15
 #define Z_DIR_PIN                           PA8
 #define Z_ENABLE_PIN                        PD1
@@ -220,6 +255,8 @@
 
 #define I_MIN_PIN                           -1
 #define J_MIN_PIN                           -1
+#define K_MIN_PIN                           -1
+#define U_MIN_PIN                           -1
 /*#ifndef J_CS_PIN
   #define J_CS_PIN                          PD12
 #endif*/
@@ -328,6 +365,18 @@
 
   #define E1_SERIAL_TX_PIN                  PD12
   #define E1_SERIAL_RX_PIN      E1_SERIAL_TX_PIN
+
+  #define I_SERIAL_TX_PIN                   PC6
+  #define I_SERIAL_RX_PIN        I_SERIAL_TX_PIN
+
+  #define J_SERIAL_TX_PIN                   PD12
+  #define J_SERIAL_RX_PIN        J_SERIAL_TX_PIN
+
+  #define K_SERIAL_TX_PIN                   PE0
+  #define K_SERIAL_RX_PIN        K_SERIAL_TX_PIN
+
+  #define U_SERIAL_TX_PIN                   PD3
+  #define U_SERIAL_RX_PIN        U_SERIAL_TX_PIN
 
   // Reduce baud rate to improve software serial reliability
   #define TMC_BAUD_RATE                    19200
